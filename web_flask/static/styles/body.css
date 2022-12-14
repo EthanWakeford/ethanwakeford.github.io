@@ -1,3 +1,10 @@
 body {
     background-image: url("../image_dump/spongebob_background.jpg");
 }
+
+#game_container {
+    height: 60%;
+    width: 80%;
+    min-width: 800px;
+    min-height: 600px;
+}
