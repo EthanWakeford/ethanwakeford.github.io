@@ -2,9 +2,13 @@ console.log('loaded js file');
 
 const config = {
   type: Phaser.AUTO,
-  width: 800,
+  width: 1000,
   height: 600,
   parent: 'game_container',
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
+  },
   physics: {
     default: 'arcade',
     arcade: {
@@ -40,7 +44,7 @@ function preload () {
 function create () {
   this.add.image(400, 300, 'background').setScale(2);
   platforms = this.physics.add.staticGroup();
-  platforms.create(400, 568, 'road').setScale(2).refreshBody();
+  platforms.create(400, 580, 'road').setScale(2).refreshBody();
   player = this.physics.add.sprite(200, 400, 'bubbleBass');
   player.setBounce(0.1);
   player.setCollideWorldBounds(true);
