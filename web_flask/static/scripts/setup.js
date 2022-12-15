@@ -22,6 +22,10 @@ const config = {
 let player;
 let platforms;
 let cursors;
+let keyA;
+let keyD;
+let keyW;
+let keySPACE;
 const game = new Phaser.Game(config);
 
 function preload () {
@@ -63,16 +67,20 @@ function create () {
     frameRate: 10,
     repeat: -1
   });
-  cursors = this.input.keyboard.createCursorKeys();
+  keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+  keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+  keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+  keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
   this.physics.add.collider(player, platforms);
   // Create Function
 }
 
 function update () {
-  if (cursors.left.isDown) {
+  if (keyA.isDown) {
     player.setAccelerationX(-200);
     player.anims.play('left', true);
-  } else if (cursors.right.isDown) {
+  } else if (keyD.isDown) {
     player.setAccelerationX(200);
     player.anims.play('right', true);
   } else {
@@ -80,7 +88,7 @@ function update () {
     player.anims.play('turn');
   }
 
-  if (cursors.up.isDown && player.body.touching.down) {
+  if ((keySpace.isDown || keyW.isDown) && player.body.touching.down) {
     player.setVelocityY(-500);
   }
   // Update Function
