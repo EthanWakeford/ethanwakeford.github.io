@@ -32,9 +32,9 @@ let keySpace;
 const game = new Phaser.Game(config);
 
 function preload () {
-  this.load.image('background', '../static/image_dump/spongebob_background.jpg');
+  this.load.image('background', '../static/image_dump/JellyfishFields_V2.png');
   this.load.image('bubbles_platform', '../static/image_dump/Green_full.png');
-  this.load.image('road', '../static/image_dump/spongebob_road.png');
+  this.load.image('road', '../static/image_dump/spongebob_road_2x.png');
   this.load.spritesheet('bubbleBass',
     '../static/image_dump/BubbleBassSpriteMap_V2.png',
     { frameWidth: 210, frameHeight: 226 }
@@ -43,18 +43,17 @@ function preload () {
 }
 function create () {
   let { width, height } = this.sys.game.canvas;
-  console.log('canvas size:', width, height);
-  this.add.image(width/2, height/2, 'background').setScale(2.2);
+  this.add.image((width / 2) * 3, height/2, 'background').setScale(.65);
   //background = this.add.tileSprite(width/2, height/2, width, height, 'background');
   platforms = this.physics.add.staticGroup();
-  platforms.create(400, 580, 'road');
+  platforms.create(width, 590, 'road').setScale(1.2).refreshBody();
   platforms.create(400, 450, 'bubbles_platform').setScale(.05).refreshBody();
   platforms.create(500, 350, 'bubbles_platform').setScale(.05).refreshBody();
   player = this.physics.add.sprite(200, 226, 'bubbleBass').setScale(0.35).refreshBody();
   player.setBounce(0.1);
   player.setCollideWorldBounds(true);
-  player.setMaxVelocity(160, 600)
-  player.setDragX(160)
+  player.setMaxVelocity(200, 700)
+  player.setDragX(200)
   
   this.anims.create({
     key: 'left',
@@ -93,22 +92,31 @@ function create () {
   keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
   this.physics.add.collider(player, platforms);
+  this.physics.world.setBounds(0, 0, width * 3, height);
+  this.cameras.main.setBounds(0, 0, width * 3, height);
+  this.cameras.main.startFollow(player, true, 0.05, 0.05,);
+  this.cameras.main.setDeadzone(200)
+
+  let playerFalling = [false, 0];
+  let fallHeight = 0;
   // Create Function
 }
 
 function update () {
   if (keyA.isDown) {
     player.setAccelerationX(-160);
-    console.log(player.body.velocity)
-    if (player.body.velocity.x >= -80) {
+    if (player.body.velocity.x > 0) {
+      player.anims.play('right-slow', true);
+    } else if (player.body.velocity.x >= -100) {
       player.anims.play('left-slow', true);
     } else {
       player.anims.play('left', true);
     }
   } else if (keyD.isDown) {
     player.setAccelerationX(160);
-    console.log(player.body.velocity)
-    if (player.body.velocity.x <= 80) {
+    if (player.body.velocity.x < 0) {
+      player.anims.play('left-slow', true);
+    } else if (player.body.velocity.x <= 100) {
       player.anims.play('right-slow', true);
     } else {
       player.anims.play('right', true);
@@ -124,5 +132,14 @@ function update () {
   if ((keySpace.isDown || keyW.isDown) && player.body.touching.down) {
     player.setVelocityY(-700);
   }
+
+  if (player.body.velocity.y > 0) {
+    playerFalling = [true, player.y];
+  }
+  if ((player.body.onFloor() && playerFalling[0]) && player.y - playerFalling[1] > 5) {
+    fallHeight = player.y - playerFalling[1];
+    this.cameras.main.shake(fallHeight * 10, (fallHeight - 10) / 500)
+    playerFalling = [false, 0];
+  };
   // Update Function
 }
