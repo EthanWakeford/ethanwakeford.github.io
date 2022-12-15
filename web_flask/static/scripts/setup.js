@@ -29,6 +29,7 @@ let keyA;
 let keyD;
 let keyW;
 let keySpace;
+let playerFalling = {'falling': false, 'height': 0, 'fallHeight': 0};
 const game = new Phaser.Game(config);
 
 function preload () {
@@ -36,8 +37,8 @@ function preload () {
   this.load.image('bubbles_platform', '../static/image_dump/Green_full.png');
   this.load.image('road', '../static/image_dump/spongebob_road_2x.png');
   this.load.spritesheet('bubbleBass',
-    '../static/image_dump/BubbleBassSpriteMap_V2.png',
-    { frameWidth: 210, frameHeight: 226 }
+  '../static/image_dump/BubbleBassSpriteMap_V2.png',
+  { frameWidth: 210, frameHeight: 226 }
   );
   // Preload Function
 }
@@ -49,10 +50,14 @@ function create () {
   platforms.create(width, 590, 'road').setScale(1.2).refreshBody();
   platforms.create(400, 450, 'bubbles_platform').setScale(.05).refreshBody();
   platforms.create(500, 350, 'bubbles_platform').setScale(.05).refreshBody();
+  //bouncing object
+  bouncy = this.physics.add.staticGroup();
+  bouncy.create(800, 580, 'bubbles_platform').setScale(.05).refreshBody();
+  
   player = this.physics.add.sprite(200, 226, 'bubbleBass').setScale(0.35).refreshBody();
   player.setBounce(0.1);
   player.setCollideWorldBounds(true);
-  player.setMaxVelocity(200, 700)
+  player.setMaxVelocity(200, 100000)
   player.setDragX(200)
   
   this.anims.create({
@@ -91,14 +96,19 @@ function create () {
   keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
   keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
+  this.physics.add.collider(player, bouncy, function () {
+    if (player.body.onFloor()) {
+      player.setVelocityY((player.y - playerFalling['height']) * -80);
+    }
+  });
   this.physics.add.collider(player, platforms);
+  this.physics.add.collider(platforms, bouncy);
+
   this.physics.world.setBounds(0, 0, width * 3, height);
   this.cameras.main.setBounds(0, 0, width * 3, height);
   this.cameras.main.startFollow(player, true, 0.05, 0.05,);
   this.cameras.main.setDeadzone(200)
 
-  let playerFalling = [false, 0];
-  let fallHeight = 0;
   // Create Function
 }
 
@@ -134,12 +144,16 @@ function update () {
   }
 
   if (player.body.velocity.y > 0) {
-    playerFalling = [true, player.y];
+    playerFalling['falling'] = true;
+    playerFalling['height'] = player.y;
   }
-  if ((player.body.onFloor() && playerFalling[0]) && player.y - playerFalling[1] > 5) {
-    fallHeight = player.y - playerFalling[1];
-    this.cameras.main.shake(fallHeight * 10, (fallHeight - 10) / 500)
-    playerFalling = [false, 0];
+  if (player.body.onFloor() && playerFalling['falling']) {
+    console.log('landed')
+    playerFalling['fallHeight'] = player.y - playerFalling['height'];
+    if (playerFalling['fallHeight'] > 10) {
+    this.cameras.main.shake(playerFalling['fallHeight'] * 10, (playerFalling['fallHeight'] - 10) / 500)
+    }
+    playerFalling['falling'] = false;
   };
   // Update Function
 }
