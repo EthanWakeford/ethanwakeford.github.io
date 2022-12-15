@@ -1,5 +1,3 @@
-console.log('loaded js file');
-
 const config = {
   type: Phaser.AUTO,
   width: 1000,
@@ -25,6 +23,7 @@ const config = {
 
 let player;
 let platforms;
+let background;
 let cursors;
 let keyA;
 let keyD;
@@ -42,7 +41,10 @@ function preload () {
   // Preload Function
 }
 function create () {
-  this.add.image(400, 300, 'background').setScale(2);
+  let { width, height } = this.sys.game.canvas;
+  console.log('canvas size:', width, height);
+  this.add.image(width/2, height/2, 'background').setScale(2.2);
+  //background = this.add.tileSprite(width/2, height/2, width, height, 'background');
   platforms = this.physics.add.staticGroup();
   platforms.create(400, 580, 'road').setScale(2).refreshBody();
   player = this.physics.add.sprite(200, 400, 'bubbleBass');
@@ -50,7 +52,6 @@ function create () {
   player.setCollideWorldBounds(true);
   player.setMaxVelocity(200, 600)
   player.setDragX(200)
-  //player.useDamping(true)
   
   this.anims.create({
     key: 'left',
