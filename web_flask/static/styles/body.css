@@ -1,3 +1,33 @@
 body {
     background-image: url("../image_dump/spongebob_background.jpg");
 }
+
+header {
+    height: 10%;
+    width: 100%;
+    text-align: center;
+    
+}
+
+header h1 {
+    color: aliceblue;
+    text-shadow: 1px 1px 1px #0e1111;
+    font-size: 35px;
+    margin: 0px;
+}
+
+#game_container {
+    margin-left: auto;
+    margin-right: auto;
+    height: 80%;
+    width: 80%;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    height: 5%;
+    text-align: center;
+    width: 95%;
+    margin: auto;
+}
