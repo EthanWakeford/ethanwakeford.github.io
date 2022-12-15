@@ -50,30 +50,42 @@ function create () {
   platforms.create(400, 580, 'road');
   platforms.create(400, 450, 'bubbles_platform').setScale(.05).refreshBody();
   platforms.create(500, 350, 'bubbles_platform').setScale(.05).refreshBody();
-  player = this.physics.add.sprite(200, 226, 'bubbleBass').setScale(0.5).refreshBody();
+  player = this.physics.add.sprite(200, 226, 'bubbleBass').setScale(0.35).refreshBody();
   player.setBounce(0.1);
   player.setCollideWorldBounds(true);
-  player.setMaxVelocity(200, 600)
-  player.setDragX(200)
+  player.setMaxVelocity(160, 600)
+  player.setDragX(160)
   
   this.anims.create({
     key: 'left',
     frames: this.anims.generateFrameNumbers('bubbleBass', { start: 0, end: 7 }),
-    frameRate: 10,
+    frameRate: 8,
+    repeat: -1
+  });
+  this.anims.create({
+    key: 'left-slow',
+    frames: this.anims.generateFrameNumbers('bubbleBass', { start: 0, end: 7 }),
+    frameRate: 6,
     repeat: -1
   });
 
   this.anims.create({
     key: 'turn',
-    frames: [{ key: 'bubbleBass', frame: 4 }],
+    frames: [{ key: 'bubbleBass', frame: 14 }],
     frameRate: 20
   });
 
   this.anims.create({
     key: 'right',
     frames: this.anims.generateFrameNumbers('bubbleBass', { start: 15, end: 8 }),
-    frameRate: 10,
+    frameRate: 8,
     repeat: -1
+  });
+  this.anims.create({
+    key: 'right-slow',
+    frames: this.anims.generateFrameNumbers('bubbleBass', { start: 15, end: 10 }),
+    frameRate: 6,
+    repeat: 0
   });
   keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
   keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
@@ -86,11 +98,24 @@ function create () {
 
 function update () {
   if (keyA.isDown) {
-    player.setAccelerationX(-200);
-    player.anims.play('left', true);
+    player.setAccelerationX(-160);
+    console.log(player.body.velocity)
+    if (player.body.velocity.x >= -80) {
+      player.anims.play('left-slow', true);
+    } else {
+      player.anims.play('left', true);
+    }
   } else if (keyD.isDown) {
-    player.setAccelerationX(200);
-    player.anims.play('right', true);
+    player.setAccelerationX(160);
+    console.log(player.body.velocity)
+    if (player.body.velocity.x <= 80) {
+      player.anims.play('right-slow', true);
+    } else {
+      player.anims.play('right', true);
+    }
+    //player.anims.addMix('right-slow', 'right', 1000)
+    //player.anims.play('right-slow', true);
+    //player.anims.play('right', true);
   } else {
     player.setAccelerationX(0);
     player.anims.play('turn');
