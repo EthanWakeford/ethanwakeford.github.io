@@ -36,8 +36,8 @@ function preload () {
   this.load.image('bubbles_platform', '../static/image_dump/Green_full.png');
   this.load.image('road', '../static/image_dump/spongebob_road.png');
   this.load.spritesheet('bubbleBass',
-    '../static/image_dump/angry_bass_face.jpg',
-    { frameWidth: 40, frameHeight: 60 }
+    '../static/image_dump/BubbleBassSpriteMap_V2.png',
+    { frameWidth: 210, frameHeight: 226 }
   );
   // Preload Function
 }
@@ -50,7 +50,7 @@ function create () {
   platforms.create(400, 580, 'road');
   platforms.create(400, 450, 'bubbles_platform').setScale(.05).refreshBody();
   platforms.create(500, 350, 'bubbles_platform').setScale(.05).refreshBody();
-  player = this.physics.add.sprite(200, 400, 'bubbleBass');
+  player = this.physics.add.sprite(200, 226, 'bubbleBass').setScale(0.5).refreshBody();
   player.setBounce(0.1);
   player.setCollideWorldBounds(true);
   player.setMaxVelocity(200, 600)
@@ -58,7 +58,7 @@ function create () {
   
   this.anims.create({
     key: 'left',
-    frames: this.anims.generateFrameNumbers('bubbleBass', { start: 0, end: 3 }),
+    frames: this.anims.generateFrameNumbers('bubbleBass', { start: 0, end: 7 }),
     frameRate: 10,
     repeat: -1
   });
@@ -71,7 +71,7 @@ function create () {
 
   this.anims.create({
     key: 'right',
-    frames: this.anims.generateFrameNumbers('bubbleBass', { start: 5, end: 8 }),
+    frames: this.anims.generateFrameNumbers('bubbleBass', { start: 15, end: 8 }),
     frameRate: 10,
     repeat: -1
   });
