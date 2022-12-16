@@ -1,0 +1,24 @@
+    Ethan
+objects that kill you
+Game over screen // system
+level restart functionality
+instructions text on screen
+
+    Blake
+sprite cropping
+audio bits
+expand background to be taller
+replace placeholders with actual assets
+
+    Future plans
+actual level design
+win condition
+some sort of enemy coming after you
+
+    Stretch goals
+spongebob
+collectables / powerups?
+cheat codes
+ability or whatever when you press S???
+some sort of story
+bubble bass attack when you jump on something??
