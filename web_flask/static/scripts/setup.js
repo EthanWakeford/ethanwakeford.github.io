@@ -22,6 +22,7 @@ const config = {
 };
 
 let player;
+let dirty;
 let platforms;
 let box;
 let bouncy;
@@ -35,10 +36,11 @@ const game = new Phaser.Game(config);
 
 function preload () {
   this.load.image('background', '../static/image_dump/JellyfishFields_V2.png');
-  this.load.image('bubbles_platform', '../static/image_dump/Green_full.png');
+  this.load.image('bubbles_platform', '../static/image_dump/bubbles_jump_flat.png');
   this.load.image('road', '../static/image_dump/spongebob_road_2x.png');
   this.load.image('moving', '../static/image_dump/BubbleBassSpriteMap_V2.png');
   this.load.image('box', '../static/image_dump/box.png');
+  this.load.image('greenBox', '../static/image_dump/Green_full.png');
   this.load.spritesheet('bubbleBass',
     '../static/image_dump/BubbleBassSpriteMap_V2.png',
     { frameWidth: 210, frameHeight: 226 }
@@ -61,13 +63,17 @@ function create () {
   // static platforms
   platforms = this.physics.add.staticGroup();
   platforms.create(width, 885, 'road').setScale(1.2).refreshBody();
-  platforms.create(400, 650, 'bubbles_platform').setScale(0.05).refreshBody();
-  platforms.create(500, 550, 'bubbles_platform').setScale(0.05).refreshBody();
+  platforms.create(400, 650, 'bubbles_platform').setScale(1).refreshBody();
+  platforms.create(500, 550, 'bubbles_platform').setScale(1).refreshBody();
 
   // bouncing object
   bouncy = this.physics.add.staticGroup();
-  bouncy.create(800, 850, 'bubbles_platform').setScale(0.05).refreshBody();
-  bouncy.create(950, 400, 'bubbles_platform').setScale(0.05).refreshBody();
+  bouncy.create(800, 850, 'bubbles_platform').setScale(1).refreshBody();
+  bouncy.create(950, 400, 'bubbles_platform').setScale(1).refreshBody();
+
+  // dirty bubble
+  dirty = this.physics.add.sprite(1500, 800, 'greenBox').setScale(0.05).refreshBody();
+
 
   // moving platforms
   movingPlatform = this.physics.add.image(1200, 900, 'moving').setScale(0.1).refreshBody();
@@ -110,6 +116,7 @@ function create () {
   this.physics.add.collider(box, bouncy);
   this.physics.add.collider(platforms, box);
   this.physics.add.collider(player, movingPlatform);
+  this.physics.add.collider(player, dirty);
 
   // world and camera building
   this.add.text(100, 400, 'WASD AND SPACE TO MOVE', { font: '35px bold', fill: '#ffffff' }).setShadow(1.5, 1.5);
