@@ -14,6 +14,7 @@ replace placeholders with actual assets
 actual level design
 win condition
 some sort of enemy coming after you
+allow you to jump up higher
 
     Stretch goals
 spongebob
@@ -22,3 +23,9 @@ cheat codes
 ability or whatever when you press S???
 some sort of story
 bubble bass attack when you jump on something??
+
+
+    maybe stuff???
+add arrow keys as controls
+delete the local phaser files
+try to import stuff again???
