@@ -56,16 +56,6 @@ function create () {
   // background creation
   // background = this.add.tileSprite(width/2, height/2, width, height, 'background');
   const { width, height } = this.sys.game.canvas;
-
-  // world and camera building
-  const { width, height } = this.sys.game.canvas;
-  this.physics.world.setBounds(0, 0, width * 3, height * 1.5);
-  this.cameras.main.setBounds(0, 0, width * 3, height * 1.5);
-  this.cameras.main.startFollow(player, true, 0.05, 0.05);
-  this.cameras.main.setDeadzone(200);
-
-  // background creation
-  // background = this.add.tileSprite(width/2, height/2, width, height, 'background');
   this.add.image(width * 1.5, height, 'background').setScale(0.65);
 
   // static platforms
