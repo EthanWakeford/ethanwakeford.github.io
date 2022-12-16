@@ -30,6 +30,7 @@ let keyA;
 let keyD;
 let keyW;
 let keySpace;
+let keyR;
 const game = new Phaser.Game(config);
 
 function preload () {
@@ -50,16 +51,11 @@ function create () {
   keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
   keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
   keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-
-  // world and camera building
-  const { width, height } = this.sys.game.canvas;
-  this.physics.world.setBounds(0, 0, width * 3, height * 1.5);
-  this.cameras.main.setBounds(0, 0, width * 3, height * 1.5);
-  this.cameras.main.startFollow(player, true, 0.05, 0.05);
-  this.cameras.main.setDeadzone(200);
+  keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
   // background creation
   // background = this.add.tileSprite(width/2, height/2, width, height, 'background');
+  const { width, height } = this.sys.game.canvas;
   this.add.image(width * 1.5, height, 'background').setScale(0.65);
 
   // static platforms
@@ -114,6 +110,13 @@ function create () {
   this.physics.add.collider(box, bouncy);
   this.physics.add.collider(platforms, box);
   this.physics.add.collider(player, movingPlatform);
+
+  // world and camera building
+  this.add.text(100, 400, 'WASD AND SPACE TO MOVE', { font: '35px bold', fill: '#ffffff' }).setShadow(1.5, 1.5);
+  this.physics.world.setBounds(0, 0, width * 3, height * 1.5);
+  this.cameras.main.setBounds(0, 0, width * 3, height * 1.5);
+  this.cameras.main.startFollow(player, true, 0.05, 0.05);
+  this.cameras.main.setDeadzone(200);
 
   // animations creation
   this.anims.create({
@@ -207,11 +210,15 @@ function update () {
     }
     player.custom.falling.falling = false;
   }
+
+  if (keyR.isDown) {
+    this.scene.restart();
+  }
   // Update Function
 }
 
-// level restart function
-function restart () {
+// game over function
+function gameOver () {
 
 }
 
