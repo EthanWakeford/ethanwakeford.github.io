@@ -63,7 +63,7 @@ function create () {
 
   // moving platforms
   movingPlatform = this.physics.add.image(1200, 900, 'moving').setScale(0.1).refreshBody();
-  movingPlatform.setImmovable(true).setVelocity(100, -100);
+  movingPlatform.setImmovable(true).setVelocity(100, -100).setMass(100000);
   movingPlatform.body.setAllowGravity(false);
   this.tweens.timeline({
     targets: movingPlatform.body.velocity,
@@ -90,32 +90,32 @@ function create () {
   // animations creation
   this.anims.create({
     key: 'left',
-    frames: this.anims.generateFrameNumbers('bubbleBass', { start: 0, end: 7 }),
+    frames: this.anims.generateFrameNumbers('bubbleBass', { start: 8, end: 0 }),
     frameRate: 8,
     repeat: -1
   });
   this.anims.create({
     key: 'left-slow',
-    frames: this.anims.generateFrameNumbers('bubbleBass', { start: 0, end: 7 }),
+    frames: this.anims.generateFrameNumbers('bubbleBass', { start: 8, end: 0 }),
     frameRate: 6,
     repeat: -1
   });
 
   this.anims.create({
-    key: 'turn',
-    frames: [{ key: 'bubbleBass', frame: 14 }],
+    key: 'stand',
+    frames: [{ key: 'bubbleBass', frame: 9 }],
     frameRate: 20
   });
 
   this.anims.create({
     key: 'right',
-    frames: this.anims.generateFrameNumbers('bubbleBass', { start: 15, end: 8 }),
+    frames: this.anims.generateFrameNumbers('bubbleBass', { start: 9, end: 17 }),
     frameRate: 8,
     repeat: -1
   });
   this.anims.create({
     key: 'right-slow',
-    frames: this.anims.generateFrameNumbers('bubbleBass', { start: 15, end: 10 }),
+    frames: this.anims.generateFrameNumbers('bubbleBass', { start: 9, end: 17 }),
     frameRate: 6,
     repeat: 0
   });
@@ -170,7 +170,7 @@ function update () {
     // player.anims.play('right', true);
   } else {
     player.setAccelerationX(0);
-    player.anims.play('turn');
+    player.anims.play('stand');
   }
 
   if ((keySpace.isDown || keyW.isDown) && player.body.touching.down) {
@@ -189,6 +189,11 @@ function update () {
     playerFalling.falling = false;
   }
   // Update Function
+}
+
+// level restart function
+function restart () {
+
 }
 
 // object definitions
