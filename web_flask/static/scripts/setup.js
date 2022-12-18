@@ -22,17 +22,18 @@ const config = {
 };
 
 let player;
-let dirty;
 let platforms;
 let box;
 let bouncy;
+let dirty;
+let pickle;
 let movingPlatform;
 let keyA;
 let keyD;
 let keyW;
 let keySpace;
 let keyR;
-const game = new Phaser.Game(config);
+let game = new Phaser.Game(config);
 
 function preload () {
   this.load.image('background', '../static/image_dump/JellyfishFields_V2.png');
@@ -73,7 +74,11 @@ function create () {
 
   // dirty bubble
   dirty = this.physics.add.sprite(1500, 800, 'greenBox').setScale(0.05).refreshBody();
+  dirty.body.setAllowGravity(false);
 
+  // the pickle
+  pickle = this.physics.add.image(2800, 800, 'greenBox').setScale(0.05);
+  pickle.body.setAllowGravity(false);
 
   // moving platforms
   movingPlatform = this.physics.add.image(1200, 900, 'moving').setScale(0.1).refreshBody();
@@ -117,6 +122,7 @@ function create () {
   this.physics.add.collider(platforms, box);
   this.physics.add.collider(player, movingPlatform);
   this.physics.add.collider(player, dirty);
+  this.physics.add.overlap(player, pickle, win, null, this);
 
   // world and camera building
   this.add.text(100, 400, 'WASD AND SPACE TO MOVE', { font: '35px bold', fill: '#ffffff' }).setShadow(1.5, 1.5);
@@ -227,6 +233,11 @@ function update () {
 // game over function
 function gameOver () {
 
+}
+
+function win (player, pickle) {
+  this.add.text(2300, 400, 'YOU WINNNN!!! YOU GOT THE PICKLE!!!', { font: '35px bold', fill: '#ffffff' }).setShadow(1.5, 1.5);
+  this.cameras.main.shake(100000);
 }
 
 // object definitions
