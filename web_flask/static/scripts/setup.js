@@ -22,6 +22,7 @@ const config = {
 };
 
 let player;
+let dirty;
 let platforms;
 let box;
 let bouncy;
