@@ -96,6 +96,10 @@ class gameScene extends Phaser.Scene {
     platforms.create(1800, 500, 'bubbles_platform').setScale(1).refreshBody();
     platforms.create(1900, 500, 'bubbles_platform').setScale(1).refreshBody();
     platforms.create(2000, 500, 'bubbles_platform').setScale(1).refreshBody();
+    
+    platforms.create(2150, 450, 'bubbles_platform').setAngle(90);
+    platforms.create(2150, 350, 'bubbles_platform').setAngle(90);
+    platforms.create(2150, 250, 'bubbles_platform').setAngle(90);
 
     platforms.create(2200, 200, 'bubbles_platform').setScale(1).refreshBody();
     platforms.create(2300, 200, 'bubbles_platform').setScale(1).refreshBody();
@@ -117,11 +121,11 @@ class gameScene extends Phaser.Scene {
     //bouncy.create(950, 400, 'bubbles_platform').setScale(1).refreshBody();
 
     // the pickle
-    pickle = this.physics.add.image(2800, 100, 'pickle').setScale(0.5);
+    pickle = this.physics.add.image(2200, 300, 'pickle').setScale(0.5);
     pickle.body.setAllowGravity(false);
 
     // moving platforms
-    movingPlatform = this.physics.add.image(2800, 500, 'bubbles_platform');
+    movingPlatform = this.physics.add.image(2800, 500, 'bubbles_platform').setScale(2).refreshBody();
     movingPlatform.setImmovable(true).setVelocity(100, -100).setMass(100000);
     movingPlatform.body.setAllowGravity(false);
     this.tweens.timeline({
@@ -302,10 +306,10 @@ class gameScene extends Phaser.Scene {
     }
 
     column.tilePositionY += 1;
-    if (dirty.body.velocity.x < 0) {
+    if (dirty.body.x - player.body.x > 0) {
       dirty.anims.play('dirtyBubbleLeft');
     }
-    if (dirty.body.velocity.x >= 0) {
+    if (dirty.body.x - player.body.x < 0) {
       dirty.anims.play('dirtyBubbleRight');
     }
     // if (dirty.body.x - player.body.x >= -150 && dirty.body.x - player.body.x <= 74) {
