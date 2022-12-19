@@ -1,13 +1,4 @@
-class gameOver extends Phaser.Scene {
-  preload() {
-    console.log('in preload')
-    this.load.image('game_over', '../static/image_dump/game_over.png');
-  }
-  create() {
-    console.log('in the create')
-    this.add.image(500, 400, 'game_over')
-  }
-}
+
 
 
 let player;
@@ -27,13 +18,16 @@ let keySpace;
 let keyR;
 let rotated;
 let game;
-
+let game_over;
+let you_win;
+let columnPhysics;
 class gameScene extends Phaser.Scene {
 
   preload () {
     this.load.image('background', '../static/image_dump/JellyfishFields_V5.png');
     this.load.image('bubbles_platform', '../static/image_dump/bubbles_jump_flat.png');
     this.load.image('bubble_column', '../static/image_dump/bubble_column.png');
+    this.load.image('invisibleBlock', '../static/image_dump/150x800_transparent.png');
     this.load.image('volcano', '../static/image_dump/spongebob_volcano.png')
     this.load.image('road', '../static/image_dump/spongebob_road_2x.png');
     this.load.image('moving', '../static/image_dump/BubbleBassSpriteMap_V2.png');
@@ -48,6 +42,8 @@ class gameScene extends Phaser.Scene {
       '../static/image_dump/BubbleBassSpriteMap_V2.png',
       { frameWidth: 210, frameHeight: 226 }
     );
+    this.load.image('game_over', '../static/image_dump/game_over_v2.png');
+    this.load.image('win', '../static/image_dump/win.png');
     // Preload Function
   }
   create () {
@@ -62,13 +58,12 @@ class gameScene extends Phaser.Scene {
     // background = this.add.tileSprite(width/2, height/2, width, height, 'background');
     const { width, height } = this.sys.game.canvas;
     this.add.image(width, height * 0.45, 'background').setScale(0.75);
-
     // static platforms
     platforms = this.physics.add.staticGroup();
     //platforms.create(width, 885, 'road').setScale(1.2).refreshBody();
-    platforms.create(0, 750, 'bubbles_platform').setScale(1).refreshBody();
-    platforms.create(100, 750, 'bubbles_platform').setScale(1).refreshBody();
-    platforms.create(200, 750, 'bubbles_platform').setScale(1).refreshBody();
+    platforms.create(0, 650, 'bubbles_platform').setScale(1).refreshBody();
+    platforms.create(100, 650, 'bubbles_platform').setScale(1).refreshBody();
+    platforms.create(200, 650, 'bubbles_platform').setScale(1).refreshBody();
     platforms.create(300, 750, 'bubbles_platform').setScale(1).refreshBody();
     platforms.create(400, 750, 'bubbles_platform').setScale(1).refreshBody();
     platforms.create(500, 750, 'bubbles_platform').setScale(1).refreshBody();
@@ -92,7 +87,8 @@ class gameScene extends Phaser.Scene {
     volcano = this.physics.add.staticGroup();
     volcano.create(2200,800, 'volcano');
     column = this.add.tileSprite(2200, 350, 400, 800, 'bubble_column');
-
+    columnPhysics = this.physics.add.image(2200, 350, 'invisibleBlock');
+    columnPhysics.body.setAllowGravity(false);
     rotated = platforms.create(1800, 400, 'bubbles_platform');
     rotated.setAngle(90);
     platforms.create(400, 200, 'bubbles_platform');
@@ -109,7 +105,7 @@ class gameScene extends Phaser.Scene {
     //bouncy.create(950, 400, 'bubbles_platform').setScale(1).refreshBody();
 
     // the pickle
-    pickle = this.physics.add.image(2800, 800, 'greenBox').setScale(0.05);
+    pickle = this.physics.add.image(2800, 600, 'greenBox').setScale(0.05);
     pickle.body.setAllowGravity(false);
 
     // moving platforms
@@ -138,7 +134,7 @@ class gameScene extends Phaser.Scene {
     dirty.body.setAllowGravity(false).setCollideWorldBounds(true);
 
     // player object
-    player = this.physics.add.sprite(200, 680, 'bubbleBass').setScale(0.35).refreshBody();
+    player = this.physics.add.sprite(100, 560, 'bubbleBass').setScale(0.35).refreshBody();
     player.setBounce(0.1).setCollideWorldBounds(true).setDragX(200);
     player.setMaxVelocity(200, 1500).setMass(1);
     player.custom = {};
@@ -165,15 +161,9 @@ class gameScene extends Phaser.Scene {
         player.setMaxVelocity(200,1500);
       }
     })
-    this.physics.add.overlap(player, column, function() {
-      console.log('collision with volcano')
-      console.log(player.body.velocity.y)
+    this.physics.add.overlap(player, columnPhysics, function() {
       player.setVelocityY(-200);
-
-      for (let i = 0; i < 1000; i++) {
-        player.setVelocityY(20);
-      }
-    })
+      });
     this.physics.add.collider(player, platforms);
     // this.physics.add.collider(player, box);
     // this.physics.add.collider(box, bouncy);
@@ -238,6 +228,9 @@ class gameScene extends Phaser.Scene {
       frameRate: 20
     });
     // Create Function
+    game_over = this.add.image(516, 500, 'game_over').setVisible(false);
+    you_win = this.add.image(516, 500, 'win').setVisible(false);
+
   }
 
   update () {
@@ -309,7 +302,10 @@ class gameScene extends Phaser.Scene {
 
     if (player.body.y >= 800) {
       console.log('you lost!');
-      this.scene.start(gameOver);
+      this.cameras.main.stopFollow(player)
+      this.cameras.main.centerOn(400, 480)
+      game_over.setVisible(true)
+      this.scene.bringToTop(game_over)
     }
 
     if (keyR.isDown) {
@@ -341,7 +337,9 @@ const config = {
 
 game = new Phaser.Game(config);
 function win (player, pickle) {
-  this.add.text(2300, 400, 'YOU WINNNN!!! YOU GOT THE PICKLE!!!', { font: '35px bold', fill: '#ffffff' }).setShadow(1.5, 1.5);
+  this.cameras.main.stopFollow(player)
+  this.cameras.main.centerOn(400, 480)
+  you_win.setVisible(true);
   this.cameras.main.shake(100000);
 }
 
