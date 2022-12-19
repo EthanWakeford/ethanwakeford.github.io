@@ -27,26 +27,27 @@ let columnPhysics;
 class gameScene extends Phaser.Scene {
 
   preload () {
+    // Background Images
     this.load.image('background', '../static/image_dump/JellyfishFields_V5.png');
+    this.load.image('game_over', '../static/image_dump/game_over_v2.png');
+    this.load.image('win', '../static/image_dump/win.png');
+
+    // Static Objects
     this.load.image('bubbles_platform', '../static/image_dump/bubbles_jump_flat.png');
     this.load.image('bubble_column', '../static/image_dump/bubble_column.png');
     this.load.image('invisibleBlock', '../static/image_dump/150x800_transparent.png');
-    this.load.image('volcano', '../static/image_dump/spongebob_volcano.png')
-    this.load.image('road', '../static/image_dump/spongebob_road_2x.png');
-    this.load.image('box', '../static/image_dump/box.png');
     this.load.image('pickle', '../static/image_dump/pickle.png');
-    this.load.image('greenBox', '../static/image_dump/Green_full.png');
     this.load.image('bigBubble', '../static/image_dump/big_bubble.png')
+
+    // Sprite Maps
+    this.load.spritesheet('bubbleBass',
+    '../static/image_dump/BubbleBassSpriteMap_V2.png',
+    { frameWidth: 210, frameHeight: 226 }
+    );
     this.load.spritesheet('dirtyBubble',
       '../static/image_dump/DirtyBubble.png',
       { frameWidth: 300, frameHeight: 300 }
-      );
-    this.load.spritesheet('bubbleBass',
-      '../static/image_dump/BubbleBassSpriteMap_V2.png',
-      { frameWidth: 210, frameHeight: 226 }
     );
-    this.load.image('game_over', '../static/image_dump/game_over_v2.png');
-    this.load.image('win', '../static/image_dump/win.png');
     // Preload Function
   }
   create () {
@@ -58,30 +59,31 @@ class gameScene extends Phaser.Scene {
     keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
     // background creation
-    // background = this.add.tileSprite(width/2, height/2, width, height, 'background');
     const { width, height } = this.sys.game.canvas;
     this.add.image(width, height * 0.45, 'background').setScale(0.75);
-    // static platforms
+
+    // static platform
     platforms = this.physics.add.staticGroup();
+
+    // bouncy platforms
     bounce_up = this.physics.add.staticGroup();
     bounce_left = this.physics.add.staticGroup();
     bounce_right = this.physics.add.staticGroup();
 
-
-    //platforms.create(width, 885, 'road').setScale(1.2).refreshBody();
-    platforms.create(0, 650, 'bubbles_platform').setScale(1).refreshBody();
-    platforms.create(100, 650, 'bubbles_platform').setScale(1).refreshBody();
-    platforms.create(200, 650, 'bubbles_platform').setScale(1).refreshBody();
-    platforms.create(450, 650, 'bubbles_platform').setScale(1).refreshBody();
-    platforms.create(550, 650, 'bubbles_platform').setScale(1).refreshBody();
-    platforms.create(650, 650, 'bubbles_platform').setScale(1).refreshBody();
+    // Map Building
+    platforms.create(0, 650, 'bubbles_platform');
+    platforms.create(100, 650, 'bubbles_platform');
+    platforms.create(200, 650, 'bubbles_platform');
+    platforms.create(450, 650, 'bubbles_platform');
+    platforms.create(550, 650, 'bubbles_platform');
+    platforms.create(650, 650, 'bubbles_platform');
 
     bounce_up.create(900, 800, 'bigBubble').setScale(0.5).refreshBody();
 
+    platforms.create(1100, 350, 'bubbles_platform');
+    platforms.create(1200, 350, 'bubbles_platform');
 
-    platforms.create(1100, 350, 'bubbles_platform').setScale(1).refreshBody();
-    platforms.create(1200, 350, 'bubbles_platform').setScale(1).refreshBody();
-
+    platforms.create(650, 200, 'bubbles_platform');
     platforms.create(600, 200, 'bubbles_platform' )
     platforms.create(500, 200, 'bubbles_platform');
     platforms.create(400, 200, 'bubbles_platform');
@@ -89,36 +91,28 @@ class gameScene extends Phaser.Scene {
 
     bounce_right.create(250, 120, 'bigBubble').setScale(0.5).refreshBody();
 
-    //platforms.create(1100, 550, 'bubbles_platform').setScale(1).refreshBody();
-    //platforms.create(1200, 550, 'bubbles_platform').setScale(1).refreshBody();
+    rotated = platforms.create(1850, 350, 'bubbles_platform');
+    rotated.setAngle(90);
 
-    platforms.create(1700, 500, 'bubbles_platform').setScale(1).refreshBody();
-    platforms.create(1800, 500, 'bubbles_platform').setScale(1).refreshBody();
-    platforms.create(1900, 500, 'bubbles_platform').setScale(1).refreshBody();
-    platforms.create(2000, 500, 'bubbles_platform').setScale(1).refreshBody();
-    
+    platforms.create(1700, 500, 'bubbles_platform');
+    platforms.create(1800, 500, 'bubbles_platform');
+    platforms.create(1900, 500, 'bubbles_platform');
+    platforms.create(2000, 500, 'bubbles_platform');
+
     platforms.create(2150, 450, 'bubbles_platform').setAngle(90);
     platforms.create(2150, 350, 'bubbles_platform').setAngle(90);
     platforms.create(2150, 250, 'bubbles_platform').setAngle(90);
 
-    platforms.create(2200, 200, 'bubbles_platform').setScale(1).refreshBody();
-    platforms.create(2300, 200, 'bubbles_platform').setScale(1).refreshBody();
-    platforms.create(2400, 200, 'bubbles_platform').setScale(1).refreshBody();
-    platforms.create(2600, 200, 'bubbles_platform').setScale(1).refreshBody();
-    platforms.create(2700, 200, 'bubbles_platform').setScale(1).refreshBody();
+    platforms.create(2200, 200, 'bubbles_platform');
+    platforms.create(2300, 200, 'bubbles_platform');
+    platforms.create(2400, 200, 'bubbles_platform');
+    platforms.create(2600, 200, 'bubbles_platform');
+    platforms.create(2700, 200, 'bubbles_platform');
 
-    volcano = this.physics.add.staticGroup();
-    volcano.create(2200,800, 'volcano');
     column = this.add.tileSprite(2000, 350, 400, 800, 'bubble_column');
     columnPhysics = this.physics.add.image(2000, 350, 'invisibleBlock');
     columnPhysics.body.setAllowGravity(false);
-    rotated = platforms.create(1850, 350, 'bubbles_platform');
-    rotated.setAngle(90);
 
-
-    // bouncing object
-
-    //bouncy.create(950, 400, 'bubbles_platform').setScale(1).refreshBody();
 
     // the pickle
     pickle = this.physics.add.image(2200, 300, 'pickle').setScale(0.5);
@@ -133,15 +127,9 @@ class gameScene extends Phaser.Scene {
       loop: -1,
       tweens: [
         { x: -100, y: 0, duration: 5000, ease: 'Stepped' },
-
         { x: 100, y: 0, duration: 5000, ease: 'Stepped'},
-
       ]
     });
-
-    // movable box
-    //box = this.physics.add.image(300, 500, 'box').setScale(0.1).refreshBody();
-    //box.setMass(100).setBounce(0).setDragX(200).setCollideWorldBounds(true);
 
     // dirty bubble
     dirty = this.physics.add.sprite(2500, 300, 'dirtyBubble').setScale(0.5).refreshBody();
@@ -154,13 +142,11 @@ class gameScene extends Phaser.Scene {
     player.custom = {};
     player.custom.falling = { falling: false, height: 0, fallHeight: 0 };
     player.custom.direction = 'right';
-    //player.body.setAllowGravity(false)
 
     // physics set ups
     this.physics.add.collider(player, bounce_up, function () {
       if (player.body.onFloor()) {
         player.setVelocityY((player.y - player.custom.falling.height) * -80);
-        // player.setVelocityY(player.body.velocity.y * -1.5);
       }
     });
       
@@ -178,28 +164,39 @@ class gameScene extends Phaser.Scene {
     })
     this.physics.add.overlap(player, columnPhysics, function() {
       player.setVelocityY(-200);
-      });
+    });
+    
     this.physics.add.collider(player, platforms);
-    // this.physics.add.collider(player, box);
-    // this.physics.add.collider(box, bouncy);
-    // this.physics.add.collider(platforms, box);
     this.physics.add.collider(player, movingPlatform);
+    this.physics.add.overlap(player, pickle, win, null, this);
+
     this.physics.add.overlap(player, dirty, function () {
       this.cameras.main.stopFollow(player)
       this.cameras.main.centerOn(400, 480)
       game_over.setVisible(true)
       this.scene.bringToTop(game_over)
     }, null, this);
-    this.physics.add.overlap(player, pickle, win, null, this);
+
 
     // world and camera building
     this.add.text(100, 400, 'WASD AND SPACE TO MOVE', { font: '35px bold', fill: '#ffffff' }).setShadow(1.5, 1.5);
+    this.add.text(950, 150, 'GET THE PICKLE', { font: '35px bold', fill: '#ffffff' }).setShadow(1.5, 1.5);
     this.physics.world.setBounds(0, 0, width * 3, height * 1.5);
     this.cameras.main.setBounds(0, 0, width * 3, height * 1.5);
     this.cameras.main.startFollow(player, true, 0.05, 0.05);
     this.cameras.main.setDeadzone(200);
 
-    // animations creation
+    // Player Animations
+    this.anims.create({
+      key: 'standRight',
+      frames: [{ key: 'bubbleBass', frame: 9 }],
+      frameRate: 20
+    });
+    this.anims.create({
+      key: 'standLeft',
+      frames: [{ key: 'bubbleBass', frame: 8 }],
+      frameRate: 20
+    });
     this.anims.create({
       key: 'left',
       frames: this.anims.generateFrameNumbers('bubbleBass', { start: 8, end: 0 }),
@@ -212,19 +209,6 @@ class gameScene extends Phaser.Scene {
       frameRate: 6,
       repeat: -1
     });
-
-    this.anims.create({
-      key: 'standRight',
-      frames: [{ key: 'bubbleBass', frame: 9 }],
-      frameRate: 20
-    });
-
-    this.anims.create({
-      key: 'standLeft',
-      frames: [{ key: 'bubbleBass', frame: 8 }],
-      frameRate: 20
-    });
-
     this.anims.create({
       key: 'right',
       frames: this.anims.generateFrameNumbers('bubbleBass', { start: 9, end: 17 }),
@@ -237,6 +221,8 @@ class gameScene extends Phaser.Scene {
       frameRate: 6,
       repeat: 0
     });
+
+    // Dirty Bubble Animations
     this.anims.create({
       key: 'dirtyBubbleLeft',
       frames: [{key: 'dirtyBubble', frame: 0}],
@@ -247,13 +233,21 @@ class gameScene extends Phaser.Scene {
       frames: [{key: 'dirtyBubble', frame: 1}],
       frameRate: 20
     });
-    // Create Function
+
+    // Create win and lose screens
     game_over = this.add.image(516, 500, 'game_over').setVisible(false);
     you_win = this.add.image(516, 500, 'win').setVisible(false);
 
+    function win (player, pickle) {
+      this.cameras.main.stopFollow(player)
+      this.cameras.main.centerOn(400, 480)
+      you_win.setVisible(true);
+      this.cameras.main.shake(100000);
+    }    
   }
 
   update () {
+    // Player movement
     if (keyA.isDown) {
       player.setAccelerationX(-160);
       player.custom.direction = 'left';
@@ -288,11 +282,11 @@ class gameScene extends Phaser.Scene {
         }
       }
     }
-
     if ((keySpace.isDown || keyW.isDown) && player.body.touching.down) {
       player.setVelocityY(-700);
     }
 
+    // Set custom falling value (boolean)
     if (player.body.velocity.y > 0) {
       player.custom.falling.falling = true;
       player.custom.falling.height = player.y;
@@ -312,29 +306,21 @@ class gameScene extends Phaser.Scene {
     if (dirty.body.x - player.body.x < 0) {
       dirty.anims.play('dirtyBubbleRight');
     }
-    // if (dirty.body.x - player.body.x >= -150 && dirty.body.x - player.body.x <= 74) {
-    //   // do nohing
-    // } else if (dirty.body.x - player.body.x > 150) {
-    //   dirty.setVelocityX(-25);
-    // } else if (dirty.body.x - player.body.x < 74) {
-    //   dirty.setVelocityX(25);
-    // }
 
+    // kill player on fall
     if (player.body.y >= 800) {
       this.cameras.main.stopFollow(player)
       this.cameras.main.centerOn(400, 480)
       game_over.setVisible(true)
       this.scene.bringToTop(game_over)
     }
-
+    // restart
     if (keyR.isDown) {
       this.scene.restart();
     }
-    // Update Function
   }
 }
-// game over function
-
+// Config object
 const config = {
   type: Phaser.AUTO,
   width: 1000,
@@ -354,13 +340,5 @@ const config = {
   scene: gameScene
 };
 
+// Game initalization
 game = new Phaser.Game(config);
-
-function win (player, pickle) {
-  this.cameras.main.stopFollow(player)
-  this.cameras.main.centerOn(400, 480)
-  you_win.setVisible(true);
-  this.cameras.main.shake(100000);
-}
-
-// object definitions
