@@ -42,7 +42,7 @@ class gameScene extends Phaser.Scene {
     // Sprite Maps
     this.load.spritesheet('bubbleBass',
     '../static/image_dump/BubbleBassSpriteMap_V2.png',
-    { frameWidth: 210, frameHeight: 226 }
+    { frameWidth: 212, frameHeight: 226 }
     );
     this.load.spritesheet('dirtyBubble',
       '../static/image_dump/DirtyBubble.png',
