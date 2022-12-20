@@ -1,7 +1,6 @@
     Ethan
 objects that kill you
 Game over screen // system
-level restart functionality
 instructions text on screen
 
     Blake

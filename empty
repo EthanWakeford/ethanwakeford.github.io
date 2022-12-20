@@ -1,0 +1,11 @@
+// floating platforms
+CloudPlatform = function (game, x, y, key, group) {
+  Phaser.Sprite.call(this, game, x, y, key);
+  game.physics.arcade.enable(this);
+  this.anchor.x = 0.5;
+  this.body.customSeparateX = true;
+  this.body.customSeparateY = true;
+  this.body.allowGravity = false;
+  this.body.immovable = true;
+  this.playerLocked = false;
+};

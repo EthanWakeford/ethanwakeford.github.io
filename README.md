@@ -1,1 +1,1 @@
-Bubble Bass's Bubble Buster
+BUBBLE BASS'S BUBBLE BUSTER
