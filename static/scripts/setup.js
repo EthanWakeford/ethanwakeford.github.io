@@ -42,7 +42,7 @@ class gameScene extends Phaser.Scene {
     // Sprite Maps
     this.load.spritesheet('bubbleBass',
     '../static/image_dump/BubbleBassSpriteMap_V2.png',
-    { frameWidth: 210, frameHeight: 226 }
+    { frameWidth: 212, frameHeight: 226 }
     );
     this.load.spritesheet('dirtyBubble',
       '../static/image_dump/DirtyBubble.png',
@@ -119,15 +119,15 @@ class gameScene extends Phaser.Scene {
     pickle.body.setAllowGravity(false);
 
     // moving platforms
-    movingPlatform = this.physics.add.image(2800, 500, 'bubbles_platform').setScale(2).refreshBody();
+    movingPlatform = this.physics.add.image(2700, 500, 'bubbles_platform').setScale(2).refreshBody();
     movingPlatform.setImmovable(true).setVelocity(100, -100).setMass(100000);
     movingPlatform.body.setAllowGravity(false);
     this.tweens.timeline({
       targets: movingPlatform.body.velocity,
       loop: -1,
       tweens: [
-        { x: -100, y: 0, duration: 5000, ease: 'Stepped' },
         { x: 100, y: 0, duration: 5000, ease: 'Stepped'},
+        { x: -100, y: 0, duration: 5000, ease: 'Stepped' },
       ]
     });
 
