@@ -5,12 +5,7 @@ app = Flask(__name__)
 @app.route('/', strict_slashes=False)
 def web_page():
     """runs the only web page"""
-    return render_template('bbbb.html')
-
-@app.route('/test', strict_slashes=False)
-def test():
-    """page for testing"""
-    return render_template('test.html')
+    return render_template('index.html')
 
 if __name__ == "__main__":
     """ Main Function """
